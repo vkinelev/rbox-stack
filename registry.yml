@@ -1,0 +1,11 @@
+registry:
+  restart: always
+  image: registry:2
+  ports:
+    - 5000:5000
+  environment:
+    REGISTRY_NOTIFICATIONS_ENDPOINTS: "- name: alistener\n  url: http://host.docker.internal:3000/docker_registry_notifications\n  timeout: 500\n  threshold: 5\n  backoff: 1"
+  volumes:
+    - /home/victor/rbox/data/registry:/var/lib/registry
+    # - /path/certs:/certs
+    # - /path/auth:/auth

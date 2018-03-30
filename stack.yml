@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  git-server:
+    image: localhost:5000/git-server
+    build: ./git-server
+    restart: always
+    volumes:
+      - /home/victor/rbox/data/git:/srv/git
+    ports:
+      - 8080:80
+
+  api:
+    image: localhost:5000/api
+    build: ./api
+    restart: always
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:9.5
+    restart: always
