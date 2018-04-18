@@ -1,0 +1,36 @@
+version: '3.3'
+
+services:
+  git-server:
+    build: ../git-server
+    restart: always
+    volumes:
+      - /home/victor/projects/rbox/data/git:/srv/git
+    ports:
+      - 8080:80
+
+  api:
+    environment:
+      # - GIT_BASE_URL=file:///api/test/fixtures/git
+      - BASE_HOST_FOR_SANDBOXES=192.168.99.100
+      - GIT_BASE_URL=file:///data/git
+      - DOCKER_REGISTRY_URL=192.168.99.100:5000
+      - DOCKER_URL=tcp://192.168.99.100:2376
+      - DOCKER_CA=${DOCKER_CA:?DOCKER_CA is unset}
+      - DOCKER_CERT=${DOCKER_CERT:?DOCKER_CERT is unset}
+      - DOCKER_KEY=${DOCKER_KEY:?DOCKER_KEY is unset}
+    build:
+      context: ../api
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - ../api:/api
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /home/victor/projects/rbox/data/git:/data/git
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres:9.6
+    restart: always
