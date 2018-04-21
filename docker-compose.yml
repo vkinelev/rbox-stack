@@ -2,6 +2,8 @@ version: '3.3'
 
 services:
   git-server:
+    environment:
+      - RBOX_API_BASE_URL=http://api:3000
     build: ../git-server
     restart: always
     volumes:
@@ -14,6 +16,8 @@ services:
       # - GIT_BASE_URL=file:///api/test/fixtures/git
       - BASE_HOST_FOR_SANDBOXES=192.168.99.100
       - GIT_BASE_URL=file:///data/git
+      - TEMPLATES_DIR=/data/templates
+      - GIT_DIR=/data/git
       - DOCKER_REGISTRY_URL=192.168.99.100:5000
       - DOCKER_URL=tcp://192.168.99.100:2376
       - DOCKER_CA=${DOCKER_CA:?DOCKER_CA is unset}
@@ -26,6 +30,7 @@ services:
       - ../api:/api
       - /var/run/docker.sock:/var/run/docker.sock
       - /home/victor/projects/rbox/data/git:/data/git
+      - /home/victor/projects/rbox/data/templates:/data/templates
     ports:
       - "3000:3000"
     depends_on:
