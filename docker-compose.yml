@@ -15,6 +15,7 @@ services:
     environment:
       # - GIT_BASE_URL=file:///api/test/fixtures/git
       - BASE_HOST_FOR_SANDBOXES=192.168.99.100
+      - GIT_PUBLIC_BASE_URL=http://localhost:8080
       - GIT_BASE_URL=file:///data/git
       - TEMPLATES_DIR=/data/templates
       - GIT_DIR=/data/git
